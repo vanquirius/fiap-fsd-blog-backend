@@ -2,7 +2,7 @@ name: CI/CD to AWS App Runner
 
 on:
   push:
-    branches: [ "main" ]  # deploy only from main branch
+    branches: [ "master" ]
 
 jobs:
   build-test-deploy:
