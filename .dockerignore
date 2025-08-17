@@ -1,6 +1,41 @@
+# Local dependency
 node_modules
 npm-debug.log
-Dockerfile
-.dockerignore
+yarn-error.log
+yarn-debug.log
+pnpm-debug.log
+
+# Git and IDE
 .git
+.gitignore
+.dockerignore
 .idea
+.vscode
+
+# Logs
+logs
+*.log
+
+# Tests and coverage
+coverage
+.nyc_output
+*.lcov
+
+# Local builds
+dist
+build
+tmp
+temp
+
+# Dockerfile
+Dockerfile
+
+# Documentation
+*.md
+*.docx
+*.pptx
+*.pdf
+
+# OS
+.DS_Store
+Thumbs.db
