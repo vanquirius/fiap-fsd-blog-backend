@@ -53,7 +53,7 @@ describe('Posts API with Bearer token', () => {
         const res = await auth(request(app).post('/posts')).send({
             title: 'Test Post',
             content: 'Hello',
-            author: 'Marcelo',
+            author: 'Author',
         });
 
         expect(res.statusCode).toBe(201);
