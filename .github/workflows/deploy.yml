@@ -1,6 +1,7 @@
 name: CI/CD to AWS App Runner
 
 on:
+  workflow_dispatch:
   push:
     branches: [ "master" ]
 
