@@ -8,6 +8,7 @@
   },
   "dependencies": {
     "cookie-parser": "~1.4.4",
+    "cors": "^2.8.5",
     "debug": "~2.6.9",
     "dotenv": "^17.2.1",
     "express": "^4.21.2",
@@ -25,7 +26,7 @@
   "license": "ISC",
   "description": "",
   "devDependencies": {
-    "jest": "^30.0.5",
+    "jest": "^25.0.0",
     "mongodb-memory-server": "^10.2.0",
     "supertest": "^7.1.4"
   }
