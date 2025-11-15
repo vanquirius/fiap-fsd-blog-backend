@@ -18,6 +18,14 @@ var postsRouter = require('./routes/posts'); // new posts router
 
 var app = express();
 
+const cors = require("cors");
+
+app.use(cors({
+    origin: ["http://localhost:3000"],   // frontend URL
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+}));
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
