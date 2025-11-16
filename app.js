@@ -1,5 +1,21 @@
 // app.js
 require('dotenv').config(); // load .env variables first
+const mongoose = require("mongoose");
+
+// ----- CONNECT TO MONGODB -----
+async function connectDB() {
+    try {
+        await mongoose.connect(process.env.MONGO_URI, {
+        });
+        console.log("📌 Connected to MongoDB");
+    } catch (err) {
+        console.error("❌ MongoDB connection failed:", err);
+        process.exit(1);
+    }
+}
+
+connectDB();
+
 
 var createError = require('http-errors');
 var express = require('express');
@@ -7,21 +23,19 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
-// Swagger setup
 const swaggerUi = require('swagger-ui-express');
 const swaggerJsdoc = require('swagger-jsdoc');
 
-// Routers
 var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
-var postsRouter = require('./routes/posts'); // new posts router
+var postsRouter = require('./routes/posts');
+var authRouter = require('./routes/auth');   // NEW — auth must be mounted first
 
 var app = express();
 
 const cors = require("cors");
 
+// CORS for frontend only
 app.use(cors({
-    origin: ["http://localhost:3000"],   // frontend URL
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
     allowedHeaders: ["Content-Type", "Authorization"],
 }));
@@ -61,17 +75,27 @@ const swaggerOptions = {
 const swaggerSpec = swaggerJsdoc(swaggerOptions);
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
-// Routes
-app.use('/', indexRouter);
-app.use('/users', usersRouter);
-app.use('/posts', postsRouter); // posts endpoints
 
-// catch 404 and forward to error handler
+// 1. Auth
+app.use('/auth', authRouter);
+
+// 2. Public index router
+app.use('/', indexRouter);
+
+// 3. Posts router (protected routes inside)
+app.use('/posts', postsRouter);
+
+
+// -----------------------------
+// 404 handler
+// -----------------------------
 app.use(function(req, res, next) {
     next(createError(404));
 });
 
-// error handler
+// -----------------------------
+// Error handler
+// -----------------------------
 app.use(function(err, req, res, next) {
     res.locals.message = err.message;
     res.locals.error = req.app.get('env') === 'development' ? err : {};
