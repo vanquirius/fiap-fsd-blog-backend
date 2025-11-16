@@ -1,6 +1,6 @@
 # 📚 Projeto Tech Challenge – Atividade 2 (FIAP Pós-Tech Full Stack Dev)
 
-**Autor:** Marcelo A. de Góes  
+**Autor:** Marcelo
 **Data:** Ago/2025
 
 ---
