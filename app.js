@@ -78,7 +78,14 @@ app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 
 // 1. Auth
-app.use('/auth', authRouter);
+console.log("🔄 Attempting to mount AUTH router...");
+try {
+    var authRouter = require('./routes/auth');
+    app.use('/auth', authRouter);
+    console.log("✅ AUTH router mounted successfully.");
+} catch (err) {
+    console.error("❌ AUTH ROUTER FAILED TO LOAD:", err);
+}
 
 // 2. Public index router
 app.use('/', indexRouter);
