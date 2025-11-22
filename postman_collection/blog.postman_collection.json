@@ -174,7 +174,8 @@
 									""
 								],
 								"type": "text/javascript",
-								"packages": {}
+								"packages": {},
+								"requests": {}
 							}
 						}
 					],
@@ -188,12 +189,10 @@
 							}
 						],
 						"url": {
-							"raw": "http://localhost:3000/posts/search?query={{title}}",
-							"protocol": "http",
+							"raw": "{{baseurl}}/posts/search?query={{title}}",
 							"host": [
-								"localhost"
+								"{{baseurl}}"
 							],
-							"port": "3000",
 							"path": [
 								"posts",
 								"search"

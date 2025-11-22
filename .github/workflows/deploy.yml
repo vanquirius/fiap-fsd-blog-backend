@@ -28,7 +28,6 @@ jobs:
       - name: Run unit tests
         run: npm test
 
-      # Configure AWS creds (required for ECR login + aws CLI)
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
@@ -48,9 +47,3 @@ jobs:
         run: |
           docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
-
-      - name: Deploy to App Runner
-        run: |
-          aws apprunner update-service \
-            --service-arn "${{ secrets.APP_RUNNER_SERVICE_ARN }}" \
-            --source-configuration "ImageRepository={ImageIdentifier='${{ steps.login-ecr.outputs.registry }}/blog-api:latest',ImageRepositoryType='ECR'}"
