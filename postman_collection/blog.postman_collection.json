@@ -248,6 +248,26 @@
 				},
 				{
 					"name": "Login with user",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"let responseData = pm.response.json();\r",
+									"\r",
+									"if (responseData && responseData.token) {\r",
+									"    pm.environment.set(\"token\", responseData.token);\r",
+									"    console.log(\"Saved token:\", responseData.token);\r",
+									"} else {\r",
+									"    console.log(\"Token not found in response:\", responseData);\r",
+									"}"
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
 					"request": {
 						"method": "POST",
 						"header": [
@@ -287,6 +307,16 @@
 				{
 					"name": "Create a Post",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "POST",
 						"header": [
 							{
@@ -319,6 +349,16 @@
 				{
 					"name": "Update a Post by Id",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "PUT",
 						"header": [
 							{
@@ -352,6 +392,16 @@
 				{
 					"name": "Delete a Post by Id",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
 						"method": "DELETE",
 						"header": [
 							{
