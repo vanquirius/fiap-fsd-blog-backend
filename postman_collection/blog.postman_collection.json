@@ -117,6 +117,30 @@
 					"response": []
 				},
 				{
+					"name": "Create Comment by Id",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseurl}}/posts/{{id}}",
+							"host": [
+								"{{baseurl}}"
+							],
+							"path": [
+								"posts",
+								"{{id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "Get Comments by Id",
 					"request": {
 						"method": "GET",
