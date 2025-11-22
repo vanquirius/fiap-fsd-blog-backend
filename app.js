@@ -28,7 +28,8 @@ const swaggerJsdoc = require('swagger-jsdoc');
 
 var indexRouter = require('./routes/index');
 var postsRouter = require('./routes/posts');
-var authRouter = require('./routes/auth');   // NEW — auth must be mounted first
+var authRouter = require('./routes/auth');
+var commentsRouter = require('./routes/comments');
 
 var app = express();
 
@@ -85,6 +86,8 @@ app.use('/', indexRouter);
 // 3. Posts router (protected routes inside)
 app.use('/posts', postsRouter);
 
+// 4. Comments router (nested under posts)
+app.use('/posts', commentsRouter);
 
 // -----------------------------
 // 404 handler

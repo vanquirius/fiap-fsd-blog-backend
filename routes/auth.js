@@ -4,7 +4,8 @@ const jwt = require("jsonwebtoken");
 const User = require("../models/User");
 const bcrypt = require("bcryptjs");
 
-const SERVER_SECRET = process.env.SERVER_SECRET || "default-server-secret";
+// Use proper JWT_SECRET naming
+const JWT_SECRET = process.env.JWT_SECRET || "default-jwt-secret";
 
 // ===============================
 // REGISTER
@@ -65,8 +66,8 @@ router.post("/login", async (req, res) => {
         // Create JWT (EXPIRES IN 1 HOUR)
         const token = jwt.sign(
             { id: user._id, username: user.username },
-            SERVER_SECRET,
-            { expiresIn: "1h" }        // <-- JWT expiration added here
+            JWT_SECRET,
+            { expiresIn: "1h" }
         );
 
         return res.json({ token });
