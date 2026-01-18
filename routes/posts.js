@@ -2,9 +2,11 @@ const express = require("express");
 const router = express.Router();
 const mongoose = require("mongoose");
 const Post = require("../models/Post");
+const User = require("../models/User");
 
 const auth = require("../middleware/auth");            // JWT for write
 const authPublic = require("../middleware/authPublic"); // SERVER_SECRET for read
+const teacherOnly = require("../middleware/teacherOnly");
 
 // ----------------------------------------
 // Helpers: extract only allowed fields
@@ -27,7 +29,7 @@ function extractPostFields(body) {
 // ----------------------------------------
 
 router.get("/", authPublic, async (req, res) => {
-    // ⭐ NEW SORT: newest → oldest
+    // NEW SORT: newest → oldest
     const posts = await Post.find().sort({ createdAt: -1 });
     res.json(posts);
 });
@@ -59,7 +61,7 @@ router.get("/:id", authPublic, async (req, res) => {
 // WRITE ROUTES (require JWT)
 // ----------------------------------------
 
-router.post("/", auth, async (req, res) => {
+router.post("/", auth, teacherOnly, async (req, res) => {
     const data = extractPostFields(req.body);
 
     // If no author provided, default to logged in user
@@ -71,7 +73,7 @@ router.post("/", auth, async (req, res) => {
     res.status(201).json(post);
 });
 
-router.put("/:id", auth, async (req, res) => {
+router.put("/:id", auth, teacherOnly, async (req, res) => {
     const id = req.params.id;
 
     if (!mongoose.Types.ObjectId.isValid(id)) {
@@ -91,7 +93,7 @@ router.put("/:id", auth, async (req, res) => {
     res.json(post);
 });
 
-router.delete("/:id", auth, async (req, res) => {
+router.delete("/:id", auth, teacherOnly, async (req, res) => {
     const id = req.params.id;
 
     if (!mongoose.Types.ObjectId.isValid(id)) {

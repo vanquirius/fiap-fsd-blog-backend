@@ -1,469 +1,994 @@
 {
-	"info": {
-		"_postman_id": "cf54e303-17d5-497e-82b0-dac3f8bef221",
-		"name": "FIAP Blog Educacional Back-End",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "13667572"
-	},
-	"item": [
-		{
-			"name": "Tests",
-			"item": [
-				{
-					"name": "Swagger Test",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{baseurl}}/api-docs",
-							"host": [
-								"{{baseurl}}"
-							],
-							"path": [
-								"api-docs"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Express Test",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{baseurl}}",
-							"host": [
-								"{{baseurl}}"
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		},
-		{
-			"name": "No auth required",
-			"item": [
-				{
-					"name": "Get All Posts",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"let responseData = pm.response.json();\r",
-									"\r",
-									"// check if array and has at least one element\r",
-									"if (Array.isArray(responseData) && responseData.length > 0) {\r",
-									"    let postId = responseData[0]._id;\r",
-									"    pm.environment.set(\"id\", postId);\r",
-									"    console.log(\"Saved id:\", postId);\r",
-									"    let title = responseData[0].title;\r",
-									"    pm.environment.set(\"title\", title);\r",
-									"    console.log(\"Saved title:\", title);\r",
-									"} else {\r",
-									"    console.log(\"Response not in expected format:\", responseData);\r",
-									"}"
-								],
-								"type": "text/javascript",
-								"packages": {}
-							}
-						}
-					],
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json",
-								"type": "text"
-							}
-						],
-						"url": {
-							"raw": "{{baseurl}}/posts",
-							"host": [
-								"{{baseurl}}"
-							],
-							"path": [
-								"posts"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Get Post by Id",
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json",
-								"type": "text"
-							}
-						],
-						"url": {
-							"raw": "{{baseurl}}/posts/{{id}}",
-							"host": [
-								"{{baseurl}}"
-							],
-							"path": [
-								"posts",
-								"{{id}}"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Create Comment by Id",
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json",
-								"type": "text"
-							}
-						],
-						"url": {
-							"raw": "{{baseurl}}/posts/{{id}}",
-							"host": [
-								"{{baseurl}}"
-							],
-							"path": [
-								"posts",
-								"{{id}}"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Get Comments by Id",
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json",
-								"type": "text"
-							}
-						],
-						"url": {
-							"raw": "{{baseurl}}/posts/{{id}}",
-							"host": [
-								"{{baseurl}}"
-							],
-							"path": [
-								"posts",
-								"{{id}}"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Search Posts",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									""
-								],
-								"type": "text/javascript",
-								"packages": {},
-								"requests": {}
-							}
-						}
-					],
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json",
-								"type": "text"
-							}
-						],
-						"url": {
-							"raw": "{{baseurl}}/posts/search?query={{title}}",
-							"host": [
-								"{{baseurl}}"
-							],
-							"path": [
-								"posts",
-								"search"
-							],
-							"query": [
-								{
-									"key": "query",
-									"value": "{{title}}"
-								}
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		},
-		{
-			"name": "Authentication",
-			"item": [
-				{
-					"name": "Register new user",
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"username\": \"teacheruser\",\r\n    \"password\": \"secretpassword123\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{baseurl}}/auth/register",
-							"host": [
-								"{{baseurl}}"
-							],
-							"path": [
-								"auth",
-								"register"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Login with user",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"let responseData = pm.response.json();\r",
-									"\r",
-									"if (responseData && responseData.token) {\r",
-									"    pm.environment.set(\"token\", responseData.token);\r",
-									"    console.log(\"Saved token:\", responseData.token);\r",
-									"} else {\r",
-									"    console.log(\"Token not found in response:\", responseData);\r",
-									"}"
-								],
-								"type": "text/javascript",
-								"packages": {},
-								"requests": {}
-							}
-						}
-					],
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"username\": \"teacheruser\",\r\n    \"password\": \"secretpassword123\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{baseurl}}/auth/login",
-							"host": [
-								"{{baseurl}}"
-							],
-							"path": [
-								"auth",
-								"login"
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		},
-		{
-			"name": "Authentication required",
-			"item": [
-				{
-					"name": "Create a Post",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{token}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "POST",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n  \"title\": \"My First Post\",\r\n  \"content\": \"This is the content of my first post. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.\",\r\n  \"author\": \"Author\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{baseurl}}/posts",
-							"host": [
-								"{{baseurl}}"
-							],
-							"path": [
-								"posts"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Update a Post by Id",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{token}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "PUT",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n  \"title\": \"Updated Post Title\",\r\n  \"content\": \"Updated post content\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{baseurl}}/posts/{{id}}",
-							"host": [
-								"{{baseurl}}"
-							],
-							"path": [
-								"posts",
-								"{{id}}"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Delete a Post by Id",
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{token}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "DELETE",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{baseurl}}/posts/{{id}}",
-							"host": [
-								"{{baseurl}}"
-							],
-							"path": [
-								"posts",
-								"{{id}}"
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		}
-	],
-	"auth": {
-		"type": "bearer",
-		"bearer": [
-			{
-				"key": "token",
-				"value": "{{server_secret}}",
-				"type": "string"
-			}
-		]
-	},
-	"event": [
-		{
-			"listen": "prerequest",
-			"script": {
-				"type": "text/javascript",
-				"packages": {},
-				"exec": [
-					""
-				]
-			}
-		},
-		{
-			"listen": "test",
-			"script": {
-				"type": "text/javascript",
-				"packages": {},
-				"exec": [
-					""
-				]
-			}
-		}
-	]
+  "info": {
+    "_postman_id": "cf54e303-17d5-497e-82b0-dac3f8bef221",
+    "name": "FIAP Blog Educacional Back-End",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "13667572"
+  },
+  "item": [
+    {
+      "name": "Tests",
+      "item": [
+        {
+          "name": "Swagger Test",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseurl}}/api-docs",
+              "host": [
+                "{{baseurl}}"
+              ],
+              "path": [
+                "api-docs"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Express Test",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseurl}}",
+              "host": [
+                "{{baseurl}}"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "No auth required",
+      "item": [
+        {
+          "name": "Get All Posts",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "let responseData = pm.response.json();\r",
+                  "\r",
+                  "// check if array and has at least one element\r",
+                  "if (Array.isArray(responseData) && responseData.length > 0) {\r",
+                  "    let postId = responseData[0]._id;\r",
+                  "    pm.environment.set(\"postid\", postId);\r",
+                  "    console.log(\"Saved id:\", postId);\r",
+                  "    let title = responseData[0].title;\r",
+                  "    pm.environment.set(\"title\", title);\r",
+                  "    console.log(\"Saved title:\", title);\r",
+                  "} else {\r",
+                  "    console.log(\"Response not in expected format:\", responseData);\r",
+                  "}"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseurl}}/posts",
+              "host": [
+                "{{baseurl}}"
+              ],
+              "path": [
+                "posts"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Post by Id",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseurl}}/posts/{{postid}}",
+              "host": [
+                "{{baseurl}}"
+              ],
+              "path": [
+                "posts",
+                "{{postid}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create Comment",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"text\": \"This is a test comment.\",\r\n  \"username\": \"testuser\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseurl}}/posts/{{postid}}/comments",
+              "host": [
+                "{{baseurl}}"
+              ],
+              "path": [
+                "posts",
+                "{{postid}}",
+                "comments"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Comments by Id",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseurl}}/posts/{{postid}}",
+              "host": [
+                "{{baseurl}}"
+              ],
+              "path": [
+                "posts",
+                "{{postid}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Search Posts",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseurl}}/posts/search?query={{title}}",
+              "host": [
+                "{{baseurl}}"
+              ],
+              "path": [
+                "posts",
+                "search"
+              ],
+              "query": [
+                {
+                  "key": "query",
+                  "value": "{{title}}"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Authentication",
+      "item": [
+        {
+          "name": "Create new teacher user",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"name\": \"Teacher 1\",\r\n    \"type\": \"teacher\",\r\n    \"username\": \"teacheruser1\",\r\n    \"password\": \"secretpassword123\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseurl}}/auth/register",
+              "host": [
+                "{{baseurl}}"
+              ],
+              "path": [
+                "auth",
+                "register"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Login with teacher user",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "let responseData = pm.response.json();\r",
+                  "\r",
+                  "if (responseData && responseData.token) {\r",
+                  "    pm.environment.set(\"token\", responseData.token);\r",
+                  "    console.log(\"Saved token:\", responseData.token);\r",
+                  "} else {\r",
+                  "    console.log(\"Token not found in response:\", responseData);\r",
+                  "}"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"username\": \"teacheruser1\",\r\n    \"password\": \"secretpassword123\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseurl}}/auth/login",
+              "host": [
+                "{{baseurl}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create new student user",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"name\": \"Student 1\",\r\n    \"type\": \"student\",\r\n    \"username\": \"studentuser1\",\r\n    \"password\": \"secretpassword123\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseurl}}/auth/register",
+              "host": [
+                "{{baseurl}}"
+              ],
+              "path": [
+                "auth",
+                "register"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Login with student user",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "let responseData = pm.response.json();\r",
+                  "\r",
+                  "if (responseData && responseData.token) {\r",
+                  "    pm.environment.set(\"token\", responseData.token);\r",
+                  "    console.log(\"Saved token:\", responseData.token);\r",
+                  "} else {\r",
+                  "    console.log(\"Token not found in response:\", responseData);\r",
+                  "}"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"username\": \"studentuser1\",\r\n    \"password\": \"secretpassword123\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseurl}}/auth/login",
+              "host": [
+                "{{baseurl}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Authentication required",
+      "item": [
+        {
+          "name": "Posts",
+          "item": [
+            {
+              "name": "Create a Post",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "let responseData = pm.response.json();\r",
+                      "\r",
+                      "// check if array and has at least one element\r",
+                      "if (Array.isArray(responseData) && responseData.length > 0) {\r",
+                      "    let postId = responseData[0]._id;\r",
+                      "    pm.environment.set(\"postid\", postId);\r",
+                      "    console.log(\"Saved id:\", postId);\r",
+                      "    let title = responseData[0].title;\r",
+                      "    pm.environment.set(\"title\", title);\r",
+                      "    console.log(\"Saved title:\", title);\r",
+                      "} else {\r",
+                      "    console.log(\"Response not in expected format:\", responseData);\r",
+                      "}"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"title\": \"My First Post\",\r\n  \"content\": \"This is the content of my first post. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.\",\r\n  \"author\": \"Author\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseurl}}/posts",
+                  "host": [
+                    "{{baseurl}}"
+                  ],
+                  "path": [
+                    "posts"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Update a Post by Id",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"title\": \"Updated Post Title\",\r\n  \"content\": \"Updated post content\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseurl}}/posts/{{postid}}",
+                  "host": [
+                    "{{baseurl}}"
+                  ],
+                  "path": [
+                    "posts",
+                    "{{postid}}"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Delete a Post by Id",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "DELETE",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseurl}}/posts/{{postid}}",
+                  "host": [
+                    "{{baseurl}}"
+                  ],
+                  "path": [
+                    "posts",
+                    "{{postid}}"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Teachers",
+          "item": [
+            {
+              "name": "Get all teachers",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "let responseData = pm.response.json();\r",
+                      "\r",
+                      "// check if array and has at least one element\r",
+                      "if (Array.isArray(responseData) && responseData.length > 0) {\r",
+                      "    let teacherId = responseData[0]._id;\r",
+                      "    pm.environment.set(\"teacherid\", teacherId);\r",
+                      "    console.log(\"Saved id:\", teacherId);\r",
+                      "} else {\r",
+                      "    console.log(\"Response not in expected format:\", responseData);\r",
+                      "}"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseurl}}/teachers",
+                  "host": [
+                    "{{baseurl}}"
+                  ],
+                  "path": [
+                    "teachers"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Teacher creates new teacher",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "let responseData = pm.response.json();\r",
+                      "\r",
+                      "// check if array and has at least one element\r",
+                      "if (responseData.teacher && responseData.teacher.id) {\r",
+                      "    pm.environment.set(\"teacherid\", responseData.teacher.id);\r",
+                      "    console.log(\"Saved id:\", responseData.teacher.id);\r",
+                      "} else {\r",
+                      "    console.log(\"Response not in expected format:\", responseData);\r",
+                      "}"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"name\": \"Teacher created by another teacher\",\r\n  \"username\": \"teachercreatedbyteacher\",\r\n  \"password\": \"secretpassword123\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseurl}}/teachers",
+                  "host": [
+                    "{{baseurl}}"
+                  ],
+                  "path": [
+                    "teachers"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Change teacher name",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "let responseData = pm.response.json();\r",
+                      "\r",
+                      "// check if array and has at least one element\r",
+                      "if (responseData.teacher && responseData.teacher.id) {\r",
+                      "    pm.environment.set(\"teacherid\", responseData.teacher.id);\r",
+                      "    console.log(\"Saved id:\", responseData.teacher.id);\r",
+                      "} else {\r",
+                      "    console.log(\"Response not in expected format:\", responseData);\r",
+                      "}"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"name\": \"Teacher name changed by another teacher\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseurl}}/teachers/{{teacherid}}",
+                  "host": [
+                    "{{baseurl}}"
+                  ],
+                  "path": [
+                    "teachers",
+                    "{{teacherid}}"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Students",
+          "item": [
+            {
+              "name": "Get all students",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "let responseData = pm.response.json();\r",
+                      "\r",
+                      "// check if array and has at least one element\r",
+                      "if (Array.isArray(responseData) && responseData.length > 0) {\r",
+                      "    let studentId = responseData[0]._id;\r",
+                      "    pm.environment.set(\"studentid\", studentId);\r",
+                      "    console.log(\"Saved id:\", studentId);\r",
+                      "} else {\r",
+                      "    console.log(\"Response not in expected format:\", responseData);\r",
+                      "}"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseurl}}/students",
+                  "host": [
+                    "{{baseurl}}"
+                  ],
+                  "path": [
+                    "students"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Teacher creates new student",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "let responseData = pm.response.json();\r",
+                      "\r",
+                      "// check if array and has at least one element\r",
+                      "if (responseData.student && responseData.student.id) {\r",
+                      "    pm.environment.set(\"studentid\", responseData.student.id);\r",
+                      "    console.log(\"Saved id:\", responseData.student.id);\r",
+                      "} else {\r",
+                      "    console.log(\"Response not in expected format:\", responseData);\r",
+                      "}"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"name\": \"Teacher created by another teacher\",\r\n  \"username\": \"teachercreatedbyteacher\",\r\n  \"password\": \"secretpassword123\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseurl}}/students",
+                  "host": [
+                    "{{baseurl}}"
+                  ],
+                  "path": [
+                    "students"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Change student name",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "let responseData = pm.response.json();\r",
+                      "\r",
+                      "// check if array and has at least one element\r",
+                      "if (responseData.teacher && responseData.teacher.id) {\r",
+                      "    pm.environment.set(\"teacherid\", responseData.teacher.id);\r",
+                      "    console.log(\"Saved id:\", responseData.teacher.id);\r",
+                      "} else {\r",
+                      "    console.log(\"Response not in expected format:\", responseData);\r",
+                      "}"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "PUT",
+                "header": [
+                  {
+                    "key": "Content-Type",
+                    "value": "application/json",
+                    "type": "text"
+                  }
+                ],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"name\": \"Student name changed by a teacher\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseurl}}/students/{{studentid}}",
+                  "host": [
+                    "{{baseurl}}"
+                  ],
+                  "path": [
+                    "students",
+                    "{{studentid}}"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{server_secret}}",
+        "type": "string"
+      }
+    ]
+  },
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "exec": [
+          ""
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "exec": [
+          ""
+        ]
+      }
+    }
+  ]
 }

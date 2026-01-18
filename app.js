@@ -30,6 +30,8 @@ var indexRouter = require('./routes/index');
 var postsRouter = require('./routes/posts');
 var authRouter = require('./routes/auth');
 var commentsRouter = require('./routes/comments');
+var teachersRouter = require("./routes/teachers");
+var studentsRouter = require("./routes/students");
 
 var app = express();
 
@@ -95,6 +97,12 @@ app.use('/posts', postsRouter);
 
 // 4. Comments router (nested under posts)
 app.use('/posts', commentsRouter);
+
+// 5. Teacher router
+app.use('/teachers', teachersRouter);
+
+// 6. Student router
+app.use('/students', studentsRouter);
 
 // -----------------------------
 // 404 handler

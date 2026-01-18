@@ -12,32 +12,44 @@ const JWT_SECRET = process.env.JWT_SECRET || "default-jwt-secret";
 // ===============================
 router.post("/register", async (req, res) => {
     try {
-        const { username, password } = req.body;
+        const { username, password, name, type } = req.body;
 
-        if (!username || !password) {
-            return res.status(400).json({ error: "Username and password required" });
+        if (!username || !password || !name || !type) {
+            return res.status(400).json({ message: "All fields are required" });
         }
 
-        // Check if user already exists
-        const existing = await User.findOne({ username });
-        if (existing) {
-            return res.status(400).json({ error: "User already exists" });
+        if (!["teacher", "student"].includes(type)) {
+            return res.status(400).json({ message: "Invalid user type" });
         }
 
-        const newUser = new User({ username, password });
-        await newUser.save();
+        const existingUser = await User.findOne({ username });
+        if (existingUser) {
+            return res.status(400).json({ message: "Username already exists" });
+        }
 
-        return res.status(201).json({
-            message: "User created successfully",
-            user: {
-                id: newUser._id,
-                username: newUser.username
-            }
+        const hashedPassword = await bcrypt.hash(password, 10);
+
+        const user = new User({
+            username,
+            password,
+            name,
+            type
         });
 
+        await user.save();
+
+        res.status(201).json({
+            message: "User created successfully",
+            user: {
+                id: user._id,
+                username: user.username,
+                name: user.name,
+                type: user.type
+            }
+        });
     } catch (err) {
-        console.error("Register error:", err);
-        res.status(500).json({ error: "Internal server error" });
+        console.error(err);
+        res.status(500).json({ message: "Server error" });
     }
 });
 
@@ -65,12 +77,19 @@ router.post("/login", async (req, res) => {
 
         // Create JWT (EXPIRES IN 1 HOUR)
         const token = jwt.sign(
-            { id: user._id, username: user.username },
+            {
+                id: user._id,
+                type: user.type
+            },
             JWT_SECRET,
             { expiresIn: "1h" }
         );
 
-        return res.json({ token });
+        res.json({
+            token,
+            username: user.username,
+            type: user.type
+        });
 
     } catch (err) {
         console.error("Login error:", err);

@@ -13,7 +13,14 @@ module.exports = function (req, res, next) {
 
     try {
         const decoded = jwt.verify(token, JWT_SECRET);
-        req.user = decoded;
+
+        // Minimal but important change:
+        // explicitly expose only what the backend needs
+        req.user = {
+            id: decoded.id,
+            type: decoded.type
+        };
+
         next();
     } catch (err) {
         if (err.name === "TokenExpiredError") {
