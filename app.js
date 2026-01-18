@@ -14,8 +14,10 @@ async function connectDB() {
     }
 }
 
-connectDB();
-
+// Do not auto-connect during tests
+if (process.env.NODE_ENV !== 'test') {
+    connectDB();
+}
 
 var createError = require('http-errors');
 var express = require('express');
